@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS groups (
+id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+name varchar(100),
+description TEXT,
+created_at TIMESTAMP,
+owner_id INT
+);
