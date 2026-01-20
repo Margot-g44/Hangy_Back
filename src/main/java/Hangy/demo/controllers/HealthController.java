@@ -1,4 +1,4 @@
-package Hangy.demo.controllers;
+package Hangy.demo.Controllers;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
