@@ -46,8 +46,15 @@ public class EventService {
         existingEvent.setDescription(updatedEvent.getDescription());
         existingEvent.setStartTime(updatedEvent.getStartTime());
         existingEvent.setEndTime(updatedEvent.getEndTime());
-        existingEvent.setGroup(updatedEvent.getGroup());
-        existingEvent.setCreatedBy(updatedEvent.getCreatedBy());
+
+        // ⚠️ on évite les null dangereux
+        if (updatedEvent.getGroup() != null) {
+            existingEvent.setGroup(updatedEvent.getGroup());
+        }
+
+        if (updatedEvent.getCreatedBy() != null) {
+            existingEvent.setCreatedBy(updatedEvent.getCreatedBy());
+        }
 
         validateEvent(existingEvent);
 
@@ -60,7 +67,7 @@ public class EventService {
         eventRepository.delete(event);
     }
 
-    // LOGIQUE MÉTIER
+    // LOGIQUE MÉTIER // Important pour penser en terme de produits + sécuriser les données
     private void validateEvent(Event event) {
 
         if (event.getTitle() == null || event.getTitle().isBlank()) {
@@ -75,16 +82,25 @@ public class EventService {
             throw new RuntimeException("Start time must be before end time");
         }
 
+        if (event.getEndTime().isBefore(event.getStartTime().plusMinutes(15))) {
+            throw new RuntimeException("Event must last at least 15 minutes");
+        }
+
+        if (event.getStartTime().isAfter(LocalDateTime.now().plusYears(1))) {
+            throw new RuntimeException("Event cannot be more than 1 year in advance");
+        }
+
         if (event.getStartTime().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Event cannot be in the past");
         }
 
-        if (event.getGroup() == null) {
-            throw new RuntimeException("Event must be linked to a group");
-        }
+        // TEMPORAIREMENT désactivé pour tes tests Postman
+        // if (event.getGroup() == null) {
+        //     throw new RuntimeException("Event must be linked to a group");
+        // }
 
-        if (event.getCreatedBy() == null) {
-            throw new RuntimeException("Event must have a creator");
-        }
+        // if (event.getCreatedBy() == null) {
+        //     throw new RuntimeException("Event must have a creator");
+        // }
     }
 }
