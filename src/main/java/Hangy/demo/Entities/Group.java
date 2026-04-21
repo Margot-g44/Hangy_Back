@@ -1,10 +1,6 @@
 package Hangy.demo.Entities;
 
 import jakarta.persistence.*;
-import jdk.jfr.Event;
-import org.apache.logging.log4j.message.Message;
-
-import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +21,6 @@ public class Group {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // Relations
     @ManyToOne
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "fk_groups_owner"))
     private User owner;

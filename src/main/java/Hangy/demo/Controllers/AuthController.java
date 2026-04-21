@@ -23,7 +23,7 @@ public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
 
 // DTO simple pour recevoir username/password/email
-class AuthRequest {
+static class AuthRequest {
     private String username;
     private String email;
     private String password;

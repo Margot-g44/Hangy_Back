@@ -18,7 +18,7 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        // Ici tu peux hasher le password si tu veux
+        // Ici pour hasher le password
         return userRepository.save(user);
     }
 
