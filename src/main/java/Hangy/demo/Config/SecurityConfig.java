@@ -1,4 +1,4 @@
-package Hangy.demo.config;
+package Hangy.demo.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
