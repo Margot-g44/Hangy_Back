@@ -2,6 +2,7 @@ package Hangy.demo.Controllers;
 
 import Hangy.demo.Entities.Event;
 import Hangy.demo.Services.EventService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class EventController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) throws BadRequestException {
         Event created = eventService.createEvent(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -41,7 +42,7 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(
             @PathVariable Long id,
-            @RequestBody Event event) {
+            @RequestBody Event event) throws BadRequestException {
 
         return ResponseEntity.ok(eventService.updateEvent(id, event));
     }

@@ -1,6 +1,7 @@
 package Hangy.demo.Services;
 
 import Hangy.demo.Entities.Event;
+import Hangy.demo.Exceptions.BadRequestException;
 import Hangy.demo.Repositories.EventRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class EventService {
     }
 
     // CREATE
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event) throws BadRequestException {
         validateEvent(event);
 
         if (event.getCreatedAt() == null) {
@@ -39,7 +40,7 @@ public class EventService {
     }
 
     // UPDATE
-    public Event updateEvent(Long id, Event updatedEvent) {
+    public Event updateEvent(Long id, Event updatedEvent) throws BadRequestException {
         Event existingEvent = getEventById(id);
 
         existingEvent.setTitle(updatedEvent.getTitle());
@@ -68,30 +69,30 @@ public class EventService {
     }
 
     // LOGIQUE MÉTIER // Important pour penser en terme de produits + sécuriser les données
-    private void validateEvent(Event event) {
+    private void validateEvent(Event event) throws BadRequestException {
 
         if (event.getTitle() == null || event.getTitle().isBlank()) {
-            throw new RuntimeException("Title is required");
+            throw new BadRequestException( "Title is required");
         }
 
         if (event.getStartTime() == null || event.getEndTime() == null) {
-            throw new RuntimeException("Start and end time are required");
+            throw new BadRequestException("Start and end time are required");
         }
 
         if (event.getStartTime().isAfter(event.getEndTime())) {
-            throw new RuntimeException("Start time must be before end time");
+            throw new BadRequestException("Start time must be before end time");
         }
 
         if (event.getEndTime().isBefore(event.getStartTime().plusMinutes(15))) {
-            throw new RuntimeException("Event must last at least 15 minutes");
+            throw new BadRequestException("Event must last at least 15 minutes");
         }
 
         if (event.getStartTime().isAfter(LocalDateTime.now().plusYears(1))) {
-            throw new RuntimeException("Event cannot be more than 1 year in advance");
+            throw new BadRequestException("Event cannot be more than 1 year in advance");
         }
 
         if (event.getStartTime().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Event cannot be in the past");
+            throw new BadRequestException("Event cannot be in the past");
         }
 
         // TEMPORAIREMENT désactivé pour tes tests Postman
