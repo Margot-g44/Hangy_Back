@@ -17,7 +17,7 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    // CREATE
+
     public Event createEvent(Event event) throws BadRequestException {
         validateEvent(event);
 
@@ -28,18 +28,18 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    // READ ALL
+
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    // READ BY ID
+
     public Event getEventById(Long id) {
         return eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+                .orElseThrow(() -> new BadRequestException("Event not found with id: " + id));
     }
 
-    // UPDATE
+
     public Event updateEvent(Long id, Event updatedEvent) throws BadRequestException {
         Event existingEvent = getEventById(id);
 
@@ -48,7 +48,7 @@ public class EventService {
         existingEvent.setStartTime(updatedEvent.getStartTime());
         existingEvent.setEndTime(updatedEvent.getEndTime());
 
-        // ⚠️ on évite les null dangereux
+        // évite les null dangereux
         if (updatedEvent.getGroup() != null) {
             existingEvent.setGroup(updatedEvent.getGroup());
         }
@@ -62,13 +62,13 @@ public class EventService {
         return eventRepository.save(existingEvent);
     }
 
-    // DELETE
+
     public void deleteEvent(Long id) {
         Event event = getEventById(id);
         eventRepository.delete(event);
     }
 
-    // LOGIQUE MÉTIER // Important pour penser en terme de produits + sécuriser les données
+    // LOGIQUE MÉTIER : Important pour penser en terme de produits + sécuriser les données
     private void validateEvent(Event event) throws BadRequestException {
 
         if (event.getTitle() == null || event.getTitle().isBlank()) {
